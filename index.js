@@ -63,7 +63,7 @@ let lastUsed, protocol;
 let build = 0;
 
 const findLatestVersion = () => {
-  const dir = `${__dirname}/lib`
+  const dir = `${__dirname}/lib`;
   const versions = fs.readdirSync(dir).map(file => {
     const match = file.match(/protocol(\d+)\.js$/)
 
@@ -121,20 +121,15 @@ const openArchive = function (file, noCache) {
     try {
       archive.protocol = require(`./lib/protocol${archive.baseBuild}`);
     } catch (err) {
-      archive.error = err;
-    }
-
-    if (!archive.protocol) {
-      const latestVersion = findLatestVersion()
+      const latestVersion = findLatestVersion();
 
       try {
-        archive.protocol = require(`./lib/protocol${latestVersion}`);
-
         if (!warnedAboutVersion) {
-          log.warn(`Unable to find version ${archive.baseBuild}, falling back on ${latestVersion}.`)
-          warnedAboutVersion = true
+          log.warn(`Unable to find version ${archive.baseBuild}, trying ${latestVersion}.`);
+          warnedAboutVersion = true;
         }
 
+        archive.protocol = require(`./lib/protocol${latestVersion}`);
       } catch (err) {
         archive.error = err;
       }
