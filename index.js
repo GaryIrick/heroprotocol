@@ -9,6 +9,8 @@ const MPQArchive = exports.MPQArchive = require('empeeku/mpyq').MPQArchive;
 const protocol29406 = exports.protocol =  require('./lib/protocol29406');
 const version = exports.version = require('./package.json').version;
 
+let warnedAboutVersion = false
+
 try {
   var optional = require('storm-replay');
 } catch (err) {
@@ -60,6 +62,24 @@ const parseStrings = function parseStrings(data) {
 let lastUsed, protocol;
 let build = 0;
 
+const findLatestVersion = () => {
+  const dir = `${__dirname}/lib`
+  const versions = fs.readdirSync(dir).map(file => {
+    const match = file.match(/protocol(\d+)\.js$/)
+
+    if (match) {
+      return match[1]
+    } else {
+      return null
+    }
+  })
+    .filter(v => v)
+    .map(v => Number(v))
+    .sort();
+
+  return versions[versions.length - 1];
+}
+
 const openArchive = function (file, noCache) {
   log.trace('openArchive() : ' + file + ', ' + noCache);
   let archive, header;
@@ -89,6 +109,11 @@ const openArchive = function (file, noCache) {
 
     // parse header
     archive.data = {};
+
+    if (!protocol29406) {
+      throw new Error('Unable to find protocol 29406, did postinstall.js run correctly?')
+    }
+
     header = archive.data[HEADER] = parseStrings(protocol29406.decodeReplayHeader(archive.header.userDataHeader.content));
     // The header's baseBuild determines which protocol to use
     archive.baseBuild = build = header.m_version.m_baseBuild;
@@ -97,6 +122,27 @@ const openArchive = function (file, noCache) {
       archive.protocol = require(`./lib/protocol${archive.baseBuild}`);
     } catch (err) {
       archive.error = err;
+    }
+
+    if (!archive.protocol) {
+      const latestVersion = findLatestVersion()
+
+      try {
+        archive.protocol = require(`./lib/protocol${latestVersion}`);
+
+        if (!warnedAboutVersion) {
+          log.warn(`Unable to find version ${archive.baseBuild}, falling back on ${latestVersion}.`)
+          warnedAboutVersion = true
+        }
+
+      } catch (err) {
+        archive.error = err;
+      }
+    }
+
+    if (!archive.protocol) {
+      // Instead of throwing below because archive.protocol is undefined, throw a more meaningful exception here.
+      throw new Error(`Unable to find a version that's usable for ${archive.baseBuild}.`)
     }
 
     // set header to proper protocol

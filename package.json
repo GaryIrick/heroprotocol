@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nydus/heroprotocol.git"
+    "url": "git+https://github.com/garyirick/heroprotocol.git"
   },
   "scripts": {
     "jslint": "node_modules/jshint/bin/jshint *.js lib/d*.js lib/Replay.js",
@@ -32,10 +32,14 @@
     "mpq"
   ],
   "author": {
-    "name": "Justin J. Novack",
-    "email": "jnovack@gmail.com"
+    "name": "Gary Irick",
+    "email": "garyirick@gmail.com"
   },
   "contributors": [
+    {
+      "name": "Justin J. Novack",
+      "email": "jnovack@gmail.com"
+    },
     {
       "name": "Mathieu Merdy",
       "email": "gfarof@gmail.com"
@@ -43,9 +47,9 @@
   ],
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nydus/heroprotocol/issues"
+    "url": "https://github.com/garyirick/heroprotocol/issues"
   },
-  "homepage": "https://github.com/nydus/heroprotocol",
+  "homepage": "https://github.com/garyirick/heroprotocol",
   "engines": {
     "node": ">8"
   },

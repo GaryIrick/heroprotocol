@@ -5,7 +5,7 @@
 ![Works with Node v10](https://img.shields.io/badge/node%20v12-%20%E2%9C%94-brightgreen)
 ![Works with Node v10](https://img.shields.io/badge/node%20v14-%20%E2%9C%94-brightgreen)
 
-***2018-12 Update** Since Blizzard has decided to effectively kill Heroes of the Storm by ending all competitive esports entirely, shifting developers off the game, and “changing the cadence” of updates, I have no longer cared about the game and have halted all development.  Shame, as it was a beloved game for me, but seeing as they completely dropped by the ball by failing to bring the game to market in a timely manner to compete in the MOBA space, my updates to this project will be considered few and very far between.*
+***2020-09 Update*** This fork was created to allow the a parser to gracefully fall back to the latest published protocol version.
 
 **heroprotocol** is a Javascript port of [Blizzard/heroprotocol](https://github.com/Blizzard/heroprotocol).
 It is a library and standalone tool to decode Heroes of the Storm replay files into Javascript data
